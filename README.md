@@ -5,11 +5,11 @@ A JavaScript/TypeScript SDK for [Logbench](https://github.com/albingroen/logbenc
 ## Install
 
 ```bash
-bun add logbench-js
+bun add -D logbench-js
 ```
 
 ```bash
-npm install logbench-js
+npm install -D logbench-js
 ```
 
 ## Quick start
