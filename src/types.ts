@@ -14,6 +14,10 @@ export type LogbenchOptions = {
   projectId: string;
   /** When `false`, disables capturing the source file and line number of each log call. Defaults to `true`. */
   captureSource?: boolean;
+  /** Project root directory or base URL. Used to convert absolute file paths/URLs
+   *  in source capture to relative paths. Useful for browser environments where
+   *  filenames are full URLs (e.g. `"http://localhost:3000"`). */
+  cwd?: string;
 };
 
 /**

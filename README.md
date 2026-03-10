@@ -37,6 +37,7 @@ Creates a new Logbench client.
 | `url`           | `string`  | No       | Base URL of your Logbench instance. Defaults to `"http://localhost:1447"` |
 | `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard              |
 | `captureSource` | `boolean` | No       | Capture the source file and line number of each log. Defaults to `true`; set to `false` to disable. |
+| `cwd`           | `string`  | No       | Project root directory. When set, replaces the URL origin in browser-captured filenames (e.g. `"http://localhost:3000"`) with the local path, producing real filesystem paths in the Logbench UI. |
 
 ### `logger.info(...content)`
 

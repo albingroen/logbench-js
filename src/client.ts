@@ -23,10 +23,12 @@ const DEFAULT_URL = "http://localhost:1447";
 export class Logbench {
   private options: LogbenchOptions;
   private url: string;
+  private cwd: string | undefined;
 
   constructor(options: LogbenchOptions) {
     this.options = options;
     this.url = options.url ?? DEFAULT_URL;
+    this.cwd = options.cwd?.replace(/\/$/, "");
   }
 
   /**
@@ -86,9 +88,13 @@ export class Logbench {
     options?: LogOptions,
   ) {
     try {
-      const source = this.options.captureSource !== false
-        ? getCallerLocation()
-        : undefined;
+      const source =
+        this.options.captureSource !== false ? getCallerLocation() : undefined;
+
+      // Replace URL origin with cwd to produce a real filesystem path
+      if (source && this.cwd && source.fileName.startsWith("http")) {
+        source.fileName = this.cwd + new URL(source.fileName).pathname;
+      }
 
       return axios.post(
         `/api/projects/${this.options.projectId}/logs/ingest`,
