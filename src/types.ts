@@ -8,8 +8,8 @@ export type SourceLocation = {
  * Configuration options for the Logbench client.
  */
 export type LogbenchOptions = {
-  /** Base URL of your Logbench instance (e.g., `"http://localhost:1447"`). */
-  url: string;
+  /** Base URL of your Logbench instance. Defaults to `"http://localhost:1447"` if omitted. */
+  url?: string;
   /** Project ID from your Logbench dashboard. */
   projectId: string;
   /** When `false`, disables capturing the source file and line number of each log call. Defaults to `true`. */

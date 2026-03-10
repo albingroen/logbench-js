@@ -18,7 +18,6 @@ npm install -D logbench-js
 import { Logbench } from "logbench-js";
 
 const logger = new Logbench({
-  url: "http://localhost:1447",
   projectId: "your-project-id",
 });
 
@@ -35,7 +34,7 @@ Creates a new Logbench client.
 
 | Option          | Type      | Required | Description                                          |
 | --------------- | --------- | -------- | ---------------------------------------------------- |
-| `url`           | `string`  | Yes      | Base URL of your Logbench instance                   |
+| `url`           | `string`  | No       | Base URL of your Logbench instance. Defaults to `"http://localhost:1447"` |
 | `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard              |
 | `captureSource` | `boolean` | No       | Capture the source file and line number of each log. Defaults to `true`; set to `false` to disable. |
 

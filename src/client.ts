@@ -12,18 +12,21 @@ import { getCallerLocation } from "./utils.ts";
  * import { Logbench } from "logbench-js";
  *
  * const logger = new Logbench({
- *   url: "http://localhost:1447",
  *   projectId: "your-project-id",
  * });
  *
  * await logger.info("Server started", { port: 3000 });
  * ```
  */
+const DEFAULT_URL = "http://localhost:1447";
+
 export class Logbench {
   private options: LogbenchOptions;
+  private url: string;
 
   constructor(options: LogbenchOptions) {
     this.options = options;
+    this.url = options.url ?? DEFAULT_URL;
   }
 
   /**
@@ -104,7 +107,7 @@ export class Logbench {
         },
         {
           headers: { "Content-Type": "application/json" },
-          baseURL: this.options.url,
+          baseURL: this.url,
         },
       );
     } catch {
