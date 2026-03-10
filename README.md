@@ -37,7 +37,7 @@ Creates a new Logbench client.
 | --------------- | --------- | -------- | ---------------------------------------------------- |
 | `url`           | `string`  | Yes      | Base URL of your Logbench instance                   |
 | `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard              |
-| `captureSource` | `boolean` | No       | Capture the source file and line number of each log  |
+| `captureSource` | `boolean` | No       | Capture the source file and line number of each log. Defaults to `true`; set to `false` to disable. |
 
 ### `logger.info(...content)`
 

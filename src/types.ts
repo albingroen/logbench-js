@@ -12,7 +12,7 @@ export type LogbenchOptions = {
   url: string;
   /** Project ID from your Logbench dashboard. */
   projectId: string;
-  /** When `true`, captures the source file and line number of each log call. */
+  /** When `false`, disables capturing the source file and line number of each log call. Defaults to `true`. */
   captureSource?: boolean;
 };
 

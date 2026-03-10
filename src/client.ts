@@ -83,11 +83,9 @@ export class Logbench {
     options?: LogOptions,
   ) {
     try {
-      const source = this.options.captureSource
+      const source = this.options.captureSource !== false
         ? getCallerLocation()
         : undefined;
-
-      console.log(source);
 
       return axios.post(
         `/api/projects/${this.options.projectId}/logs/ingest`,
