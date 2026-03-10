@@ -1,14 +1,35 @@
 import superjson from "superjson";
 import axios from "axios";
+import ErrorStackParser from "error-stack-parser";
 
-type LogbenchOptions = { url: string; projectId: string };
+type LogbenchOptions = {
+  url: string;
+  projectId: string;
+  captureSource?: boolean;
+};
+
+function getCallerLocation(): string | undefined {
+  try {
+    const frames = ErrorStackParser.parse(new Error());
+    // skip: getCallerLocation -> log -> public method -> CALLER
+    const caller = frames[3];
+    if (!caller?.fileName || !caller.lineNumber) return undefined;
+    const clean = caller.fileName.split("?")[0]!;
+    const name = clean.split("/").pop()?.split("\\").pop();
+    return caller.columnNumber
+      ? `${name}@L${caller.lineNumber}:${caller.columnNumber}`
+      : `${name}@L${caller.lineNumber}`;
+  } catch {
+    return undefined;
+  }
+}
 
 type LogContent = Array<unknown>;
 
 export type LogOptions = {
-  isBookmarked?: boolean
-  annotation?: string
-}
+  isBookmarked?: boolean;
+  annotation?: string;
+};
 
 export enum LogLevel {
   Info = "INFO",
@@ -47,8 +68,16 @@ export class Logbench {
     return this.log(LogLevel.Err, content, options);
   }
 
-  private async log(level: LogLevel, content: LogContent, options?: LogOptions) {
+  private async log(
+    level: LogLevel,
+    content: LogContent,
+    options?: LogOptions,
+  ) {
     try {
+      const source = this.options.captureSource
+        ? getCallerLocation()
+        : undefined;
+
       return axios.post(
         `/api/projects/${this.options.projectId}/logs/ingest`,
         {
@@ -56,8 +85,9 @@ export class Logbench {
             content.length === 1 ? content[0] : content,
           ).json,
           level,
-          isBookmarked: options?.isBookmarked,
-          annotation: options?.annotation,
+          ...(source != null && { source }),
+          ...(options?.isBookmarked != null && { isBookmarked: options.isBookmarked }),
+          ...(options?.annotation != null && { annotation: options.annotation }),
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -69,4 +99,3 @@ export class Logbench {
     }
   }
 }
-
