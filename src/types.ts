@@ -1,0 +1,32 @@
+export type SourceLocation = {
+  fileName: string;
+  lineNumber: number;
+  columnNumber?: number;
+};
+
+/**
+ * Configuration options for the Logbench client.
+ */
+export type LogbenchOptions = {
+  /** Base URL of your Logbench instance (e.g., `"http://localhost:1447"`). */
+  url: string;
+  /** Project ID from your Logbench dashboard. */
+  projectId: string;
+  /** When `true`, captures the source file and line number of each log call. */
+  captureSource?: boolean;
+};
+
+/**
+ * Variadic log content — any number of values of any type.
+ */
+export type LogContent = Array<unknown>;
+
+/**
+ * Optional metadata to attach to a log entry via the `*With` methods.
+ */
+export type LogOptions = {
+  /** Mark this log as bookmarked in the Logbench UI. */
+  isBookmarked?: boolean;
+  /** Free-text annotation to attach to the log entry. */
+  annotation?: string;
+};

@@ -33,10 +33,11 @@ logger.err("Failed to connect to database");
 
 Creates a new Logbench client.
 
-| Option      | Type     | Description                          |
-| ----------- | -------- | ------------------------------------ |
-| `url`       | `string` | Base URL of your Logbench instance   |
-| `projectId` | `string` | Project ID from your Logbench dashboard |
+| Option          | Type      | Required | Description                                          |
+| --------------- | --------- | -------- | ---------------------------------------------------- |
+| `url`           | `string`  | Yes      | Base URL of your Logbench instance                   |
+| `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard              |
+| `captureSource` | `boolean` | No       | Capture the source file and line number of each log  |
 
 ### `logger.info(...content)`
 
@@ -55,6 +56,27 @@ All methods accept any number of arguments of any type. Values are serialized wi
 ```typescript
 logger.info("User signed in", { userId: "abc123", at: new Date() });
 logger.err("Request failed", { status: 500, headers: new Map([["x-request-id", "abc"]]) });
+```
+
+### `logger.infoWith(options, ...content)`
+
+### `logger.warnWith(options, ...content)`
+
+### `logger.errWith(options, ...content)`
+
+Same as `info`, `warn`, and `err`, but with an additional `LogOptions` first argument for attaching metadata:
+
+| Option         | Type      | Description                                  |
+| -------------- | --------- | -------------------------------------------- |
+| `isBookmarked` | `boolean` | Mark this log as bookmarked in the UI        |
+| `annotation`   | `string`  | Free-text annotation to attach to the entry  |
+
+```typescript
+logger.infoWith(
+  { isBookmarked: true, annotation: "deploy v2.1.0" },
+  "Deployment started",
+  { version: "2.1.0" },
+);
 ```
 
 ### `LogLevel`
@@ -78,6 +100,17 @@ POST {url}/api/projects/{projectId}/logs/ingest
 ```
 
 Errors from the HTTP call are silently caught so logging never crashes your application.
+
+## Project structure
+
+```
+src/
+  index.ts    Barrel export
+  types.ts    TypeScript type definitions
+  enums.ts    LogLevel enum
+  utils.ts    Internal helpers (source location capture)
+  client.ts   Logbench client class
+```
 
 ## License
 

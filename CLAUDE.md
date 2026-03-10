@@ -15,8 +15,12 @@ logbench-js is a JavaScript/TypeScript SDK for [Logbench](https://github.com/alb
 
 ## Architecture
 
-This is a single-file SDK (`index.ts`). It exports:
-- `Logbench` class — instantiated with `{ url, projectId }`, exposes `info()`, `warn()`, `err()` methods
-- `LogLevel` enum — `Info`, `Warn`, `Err`
+The SDK lives under `src/` and is split by concern:
+
+- `src/index.ts` — Barrel re-exports all public API
+- `src/types.ts` — `LogbenchOptions`, `LogContent`, `LogOptions` type definitions
+- `src/enums.ts` — `LogLevel` enum (`Info`, `Warn`, `Err`)
+- `src/utils.ts` — Internal helper (`getCallerLocation`) for source capture
+- `src/client.ts` — `Logbench` class with `info()`, `warn()`, `err()`, `infoWith()`, `warnWith()`, `errWith()` methods
 
 All log methods POST to `{url}/api/projects/{projectId}/logs/ingest` using axios. Errors are silently caught so logging never crashes the host application.
