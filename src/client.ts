@@ -1,8 +1,6 @@
-import superjson from "superjson";
-import axios from "axios";
 import type { LogbenchOptions, LogContent, LogOptions } from "./types.ts";
 import { LogLevel } from "./enums.ts";
-import { getCallerLocation } from "./utils.ts";
+import { getCallerLocation, jsReplacer } from "./utils.ts";
 
 /**
  * Client for sending structured logs to a Logbench server.
@@ -96,24 +94,25 @@ export class Logbench {
         source.fileName = this.cwd + new URL(source.fileName).pathname;
       }
 
-      return axios.post(
-        `/api/projects/${this.options.projectId}/logs/ingest`,
+      return fetch(
+        `${this.url}/api/projects/${this.options.projectId}/logs/ingest`,
         {
-          content: superjson.serialize(
-            content.length === 1 ? content[0] : content,
-          ).json,
-          level,
-          ...(source != null && { source }),
-          ...(options?.isBookmarked != null && {
-            isBookmarked: options.isBookmarked,
-          }),
-          ...(options?.annotation != null && {
-            annotation: options.annotation,
-          }),
-        },
-        {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          baseURL: this.url,
+          body: JSON.stringify(
+            {
+              content: content.length === 1 ? content[0] : content,
+              level,
+              ...(source != null && { source }),
+              ...(options?.isBookmarked != null && {
+                isBookmarked: options.isBookmarked,
+              }),
+              ...(options?.annotation != null && {
+                annotation: options.annotation,
+              }),
+            },
+            jsReplacer,
+          ),
         },
       );
     } catch {

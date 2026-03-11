@@ -51,7 +51,7 @@ Send a warning-level log.
 
 Send an error-level log.
 
-All methods accept any number of arguments of any type. Values are serialized with [superjson](https://github.com/flightcontrolhq/superjson), so types like `Date`, `Set`, `Map`, `BigInt`, `undefined`, and `RegExp` are preserved.
+All methods accept any number of arguments of any type.
 
 ```typescript
 logger.info("User signed in", { userId: "abc123", at: new Date() });
