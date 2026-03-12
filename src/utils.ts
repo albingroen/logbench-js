@@ -36,13 +36,43 @@ export function jsReplacer(_: string, v: unknown): unknown {
   }
 
   if (typeof v === "function") {
-    return { _type: "@js/Function", _value: v.toString() };
+    const s = v.toString();
+    return s.startsWith("class ")
+      ? { _type: "@js/Class", _value: s }
+      : { _type: "@js/Function", _value: s };
   }
 
   if (v instanceof Error) {
     return {
       _type: "@js/Error",
-      _value: { message: v.message, cause: v.cause, name: v.name, stack: v.stack },
+      _value: {
+        message: v.message,
+        cause: v.cause,
+        name: v.name,
+        stack: v.stack,
+      },
+    };
+  }
+
+  if (
+    v !== null &&
+    typeof v === "object" &&
+    v.constructor?.toString().startsWith("class ")
+  ) {
+    const proto = Object.getPrototypeOf(v);
+    const methods = Object.fromEntries(
+      Object.getOwnPropertyNames(proto)
+        .filter((k) => k !== "constructor")
+        .map((k) => [k, proto[k]]),
+    );
+
+    return {
+      _type: "@js/ClassInstance",
+      _value: Object.assign(
+        { className: v.constructor.name || "(anonymous)" },
+        v,
+        methods,
+      ),
     };
   }
 
