@@ -32,11 +32,11 @@ logger.err("Failed to connect to database");
 
 Creates a new Logbench client.
 
-| Option          | Type      | Required | Description                                          |
-| --------------- | --------- | -------- | ---------------------------------------------------- |
-| `url`           | `string`  | No       | Base URL of your Logbench instance. Defaults to `"http://localhost:1447"` |
-| `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard              |
-| `captureSource` | `boolean` | No       | Capture the source file and line number of each log. Defaults to `true`; set to `false` to disable. |
+| Option          | Type      | Required | Description                                                                                                                                                                                       |
+| --------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `url`           | `string`  | No       | Base URL of your Logbench instance. Defaults to `"http://localhost:1447"`                                                                                                                         |
+| `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard                                                                                                                                                           |
+| `captureSource` | `boolean` | No       | Capture the source file and line number of each log. Defaults to `true`; set to `false` to disable.                                                                                               |
 | `cwd`           | `string`  | No       | Project root directory. When set, replaces the URL origin in browser-captured filenames (e.g. `"http://localhost:3000"`) with the local path, producing real filesystem paths in the Logbench UI. |
 
 ### `logger.info(...content)`
@@ -82,17 +82,15 @@ TypeScript users get type support automatically via the bundled `global.d.ts` de
 
 Same as `info`, `warn`, and `err`, but with an additional `LogOptions` first argument for attaching metadata:
 
-| Option         | Type      | Description                                  |
-| -------------- | --------- | -------------------------------------------- |
-| `isBookmarked` | `boolean` | Mark this log as bookmarked in the UI        |
-| `annotation`   | `string`  | Free-text annotation to attach to the entry  |
+| Option         | Type      | Description                                 |
+| -------------- | --------- | ------------------------------------------- |
+| `isBookmarked` | `boolean` | Mark this log as bookmarked in the UI       |
+| `annotation`   | `string`  | Free-text annotation to attach to the entry |
 
 ```typescript
-logger.infoWith(
-  { isBookmarked: true, annotation: "deploy v2.1.0" },
-  "Deployment started",
-  { version: "2.1.0" },
-);
+logger.infoWith({ isBookmarked: true, annotation: "deploy v2.1.0" }, "Deployment started", {
+  version: "2.1.0",
+});
 ```
 
 ### `LogLevel`
@@ -102,9 +100,9 @@ Exported enum for the three log levels if you need to reference them directly.
 ```typescript
 import { LogLevel } from "logbench-js";
 
-LogLevel.Info  // "INFO"
-LogLevel.Warn  // "WARNING"
-LogLevel.Err   // "ERROR"
+LogLevel.Info; // "INFO"
+LogLevel.Warn; // "WARNING"
+LogLevel.Err; // "ERROR"
 ```
 
 ## How it works

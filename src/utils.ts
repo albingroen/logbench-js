@@ -54,11 +54,7 @@ export function jsReplacer(_: string, v: unknown): unknown {
     };
   }
 
-  if (
-    v !== null &&
-    typeof v === "object" &&
-    v.constructor?.toString().startsWith("class ")
-  ) {
+  if (v !== null && typeof v === "object" && v.constructor?.toString().startsWith("class ")) {
     const proto = Object.getPrototypeOf(v);
     const methods = Object.fromEntries(
       Object.getOwnPropertyNames(proto)
@@ -68,11 +64,7 @@ export function jsReplacer(_: string, v: unknown): unknown {
 
     return {
       _type: "@js/ClassInstance",
-      _value: Object.assign(
-        { className: v.constructor.name || "(anonymous)" },
-        v,
-        methods,
-      ),
+      _value: Object.assign({ className: v.constructor.name || "(anonymous)" }, v, methods),
     };
   }
 
@@ -90,9 +82,7 @@ export function jsReplacer(_: string, v: unknown): unknown {
  * @returns A `SourceLocation` object, or `undefined` if parsing fails.
  * @internal
  */
-export function getCallerLocation(
-  frameOffset: number,
-): SourceLocation | undefined {
+export function getCallerLocation(frameOffset: number): SourceLocation | undefined {
   try {
     const frames = ErrorStackParser.parse(new Error());
     const caller = frames[frameOffset];

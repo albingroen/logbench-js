@@ -49,19 +49,17 @@ export class Logbench {
   setupGlobals() {
     this.callerFrameOffset = 4;
 
-    const instance = this;
-
     globalThis.bench = {
-      info(...args) {
-        instance.info(...args);
+      info: (...args) => {
+        this.info(...args);
         console.info(...args);
       },
-      warn(...args) {
-        instance.warn(...args);
+      warn: (...args) => {
+        this.warn(...args);
         console.warn(...args);
       },
-      err(...args) {
-        instance.err(...args);
+      err: (...args) => {
+        this.err(...args);
         console.error(...args);
       },
     };
@@ -118,11 +116,7 @@ export class Logbench {
     return this.log(LogLevel.Err, content, options);
   }
 
-  private async log(
-    level: LogLevel,
-    content: LogContent,
-    options?: LogOptions,
-  ) {
+  private async log(level: LogLevel, content: LogContent, options?: LogOptions) {
     try {
       const source =
         this.options.captureSource !== false
@@ -134,27 +128,24 @@ export class Logbench {
         source.fileName = this.cwd + new URL(source.fileName).pathname;
       }
 
-      return fetch(
-        `${this.url}/api/projects/${this.options.projectId}/logs/ingest`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(
-            {
-              content: content.length === 1 ? content[0] : content,
-              level,
-              ...(source != null && { source }),
-              ...(options?.isBookmarked != null && {
-                isBookmarked: options.isBookmarked,
-              }),
-              ...(options?.annotation != null && {
-                annotation: options.annotation,
-              }),
-            },
-            jsReplacer,
-          ),
-        },
-      );
+      return fetch(`${this.url}/api/projects/${this.options.projectId}/logs/ingest`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(
+          {
+            content: content.length === 1 ? content[0] : content,
+            level,
+            ...(source != null && { source }),
+            ...(options?.isBookmarked != null && {
+              isBookmarked: options.isBookmarked,
+            }),
+            ...(options?.annotation != null && {
+              annotation: options.annotation,
+            }),
+          },
+          jsReplacer,
+        ),
+      });
     } catch {
       /* ignore — logging should never crash the host application */
     }
