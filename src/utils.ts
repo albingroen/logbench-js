@@ -82,16 +82,20 @@ export function jsReplacer(_: string, v: unknown): unknown {
 /**
  * Walks the error stack to find the caller's source location.
  *
- * Stack frames skipped:
- * `getCallerLocation` (0) → `Logbench.log` (1) → `Logbench.{info|warn|...}` (2) → **caller** (3)
+ * @param frameOffset - Index of the caller frame in the stack. Direct calls
+ *   use offset 3 (`getCallerLocation` → `log` → `info|warn|err` → **caller**).
+ *   When called via the `setupGlobals()` wrapper, offset 4 accounts for the
+ *   extra `bench.*` frame.
  *
  * @returns A `SourceLocation` object, or `undefined` if parsing fails.
  * @internal
  */
-export function getCallerLocation(): SourceLocation | undefined {
+export function getCallerLocation(
+  frameOffset: number,
+): SourceLocation | undefined {
   try {
     const frames = ErrorStackParser.parse(new Error());
-    const caller = frames[3];
+    const caller = frames[frameOffset];
     if (!caller?.fileName || !caller.lineNumber) return undefined;
     const fileName = caller.fileName.split("?")[0]!;
     return {

@@ -15,6 +15,17 @@ import { getCallerLocation, jsReplacer } from "./utils.ts";
  *
  * await logger.info("Server started", { port: 3000 });
  * ```
+ *
+ * @example Setup global `bench` helper
+ * ```ts
+ * const logger = new Logbench({ projectId: "my-project" });
+ * logger.setupGlobals();
+ *
+ * // Now available everywhere:
+ * bench.info("hello");  // logs to Logbench AND console.info
+ * bench.warn("uh oh");  // logs to Logbench AND console.warn
+ * bench.err("broken");  // logs to Logbench AND console.error
+ * ```
  */
 const DEFAULT_URL = "http://localhost:1447";
 
@@ -22,11 +33,38 @@ export class Logbench {
   private options: LogbenchOptions;
   private url: string;
   private cwd: string | undefined;
+  private callerFrameOffset: number = 3;
 
   constructor(options: LogbenchOptions) {
     this.options = options;
     this.url = options.url ?? DEFAULT_URL;
     this.cwd = options.cwd?.replace(/\/$/, "");
+  }
+
+  /**
+   * Registers `globalThis.bench` with `info`, `warn`, and `err` methods that
+   * send logs to Logbench and forward the arguments to the corresponding
+   * `console` method (`console.info`, `console.warn`, `console.error`).
+   */
+  setupGlobals() {
+    this.callerFrameOffset = 4;
+
+    const instance = this;
+
+    globalThis.bench = {
+      info(...args) {
+        instance.info(...args);
+        console.info(...args);
+      },
+      warn(...args) {
+        instance.warn(...args);
+        console.warn(...args);
+      },
+      err(...args) {
+        instance.err(...args);
+        console.error(...args);
+      },
+    };
   }
 
   /**
@@ -87,7 +125,9 @@ export class Logbench {
   ) {
     try {
       const source =
-        this.options.captureSource !== false ? getCallerLocation() : undefined;
+        this.options.captureSource !== false
+          ? getCallerLocation(this.callerFrameOffset)
+          : undefined;
 
       // Replace URL origin with cwd to produce a real filesystem path
       if (source && this.cwd && source.fileName.startsWith("http")) {

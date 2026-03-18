@@ -14,8 +14,13 @@
       "default": "./src/index.ts"
     }
   },
+  "scripts": {
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check"
+  },
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "oxfmt": "^0.41.0"
   },
   "peerDependencies": {
     "typescript": "^5"

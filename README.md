@@ -58,6 +58,22 @@ logger.info("User signed in", { userId: "abc123", at: new Date() });
 logger.err("Request failed", { status: 500, headers: new Map([["x-request-id", "abc"]]) });
 ```
 
+### `logger.setupGlobals()`
+
+Registers a global `bench` object on `globalThis` with `info`, `warn`, and `err` methods. Each method sends the log to Logbench **and** forwards the arguments to the corresponding `console` method (`console.info`, `console.warn`, `console.error`).
+
+```typescript
+const logger = new Logbench({ projectId: "your-project-id" });
+logger.setupGlobals();
+
+// Available everywhere — no imports needed:
+bench.info("Server started", { port: 3000 });
+bench.warn("Disk usage above 80%");
+bench.err("Failed to connect to database");
+```
+
+TypeScript users get type support automatically via the bundled `global.d.ts` declarations.
+
 ### `logger.infoWith(options, ...content)`
 
 ### `logger.warnWith(options, ...content)`
