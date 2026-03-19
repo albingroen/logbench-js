@@ -11,7 +11,7 @@ interface Bench {
   /** Log at warn level and forward to `console.warn`. */
   warn(...content: unknown[]): void;
   /** Log at error level and forward to `console.error`. */
-  err(...content: unknown[]): void;
+  error(...content: unknown[]): void;
 }
 
 declare global {

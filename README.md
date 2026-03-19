@@ -23,7 +23,7 @@ const logger = new Logbench({
 
 logger.info("Server started on port 3000");
 logger.warn("Disk usage above 80%");
-logger.err("Failed to connect to database");
+logger.error("Failed to connect to database");
 ```
 
 ## API
@@ -47,7 +47,7 @@ Send an info-level log.
 
 Send a warning-level log.
 
-### `logger.err(...content)`
+### `logger.error(...content)`
 
 Send an error-level log.
 
@@ -55,12 +55,12 @@ All methods accept any number of arguments of any type.
 
 ```typescript
 logger.info("User signed in", { userId: "abc123", at: new Date() });
-logger.err("Request failed", { status: 500, headers: new Map([["x-request-id", "abc"]]) });
+logger.error("Request failed", { status: 500, headers: new Map([["x-request-id", "abc"]]) });
 ```
 
 ### `logger.setupGlobals()`
 
-Registers a global `bench` object on `globalThis` with `info`, `warn`, and `err` methods. Each method sends the log to Logbench **and** forwards the arguments to the corresponding `console` method (`console.info`, `console.warn`, `console.error`).
+Registers a global `bench` object on `globalThis` with `info`, `warn`, and `error` methods. Each method sends the log to Logbench **and** forwards the arguments to the corresponding `console` method (`console.info`, `console.warn`, `console.error`).
 
 ```typescript
 const logger = new Logbench({ projectId: "your-project-id" });
@@ -69,7 +69,7 @@ logger.setupGlobals();
 // Available everywhere — no imports needed:
 bench.info("Server started", { port: 3000 });
 bench.warn("Disk usage above 80%");
-bench.err("Failed to connect to database");
+bench.error("Failed to connect to database");
 ```
 
 TypeScript users get type support automatically via the bundled `global.d.ts` declarations.
@@ -78,7 +78,7 @@ TypeScript users get type support automatically via the bundled `global.d.ts` de
 
 ### `logger.warnWith(options, ...content)`
 
-### `logger.errWith(options, ...content)`
+### `logger.errorWith(options, ...content)`
 
 Same as `info`, `warn`, and `err`, but with an additional `LogOptions` first argument for attaching metadata:
 

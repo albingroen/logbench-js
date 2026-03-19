@@ -75,7 +75,7 @@ export function jsReplacer(_: string, v: unknown): unknown {
  * Walks the error stack to find the caller's source location.
  *
  * @param frameOffset - Index of the caller frame in the stack. Direct calls
- *   use offset 3 (`getCallerLocation` → `log` → `info|warn|err` → **caller**).
+ *   use offset 3 (`getCallerLocation` → `log` → `info|warn|error` → **caller**).
  *   When called via the `setupGlobals()` wrapper, offset 4 accounts for the
  *   extra `bench.*` frame.
  *

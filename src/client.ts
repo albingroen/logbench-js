@@ -24,7 +24,7 @@ import { getCallerLocation, jsReplacer } from "./utils.ts";
  * // Now available everywhere:
  * bench.info("hello");  // logs to Logbench AND console.info
  * bench.warn("uh oh");  // logs to Logbench AND console.warn
- * bench.err("broken");  // logs to Logbench AND console.error
+ * bench.error("broken");  // logs to Logbench AND console.error
  * ```
  */
 const DEFAULT_URL = "http://localhost:1447";
@@ -42,7 +42,7 @@ export class Logbench {
   }
 
   /**
-   * Registers `globalThis.bench` with `info`, `warn`, and `err` methods that
+   * Registers `globalThis.bench` with `info`, `warn`, and `error` methods that
    * send logs to Logbench and forward the arguments to the corresponding
    * `console` method (`console.info`, `console.warn`, `console.error`).
    */
@@ -58,8 +58,8 @@ export class Logbench {
         this.warn(...args);
         console.warn(...args);
       },
-      err: (...args) => {
-        this.err(...args);
+      error: (...args) => {
+        this.error(...args);
         console.error(...args);
       },
     };
@@ -85,8 +85,8 @@ export class Logbench {
    * Send an error-level log.
    * @param content - One or more values of any type to log.
    */
-  async err(...content: LogContent) {
-    return this.log(LogLevel.Err, content);
+  async error(...content: LogContent) {
+    return this.log(LogLevel.Error, content);
   }
 
   /**
@@ -112,8 +112,8 @@ export class Logbench {
    * @param options - Bookmark and annotation metadata.
    * @param content - One or more values of any type to log.
    */
-  async errWith(options: LogOptions, ...content: LogContent) {
-    return this.log(LogLevel.Err, content, options);
+  async errorWith(options: LogOptions, ...content: LogContent) {
+    return this.log(LogLevel.Error, content, options);
   }
 
   private async log(level: LogLevel, content: LogContent, options?: LogOptions) {
