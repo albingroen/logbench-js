@@ -21,6 +21,7 @@ const logger = new Logbench({
   projectId: "your-project-id",
 });
 
+logger.log("Server started on port 3000");
 logger.info("Server started on port 3000");
 logger.warn("Disk usage above 80%");
 logger.error("Failed to connect to database");
@@ -38,6 +39,10 @@ Creates a new Logbench client.
 | `projectId`     | `string`  | Yes      | Project ID from your Logbench dashboard                                                                                                                                                           |
 | `captureSource` | `boolean` | No       | Capture the source file and line number of each log. Defaults to `true`; set to `false` to disable.                                                                                               |
 | `cwd`           | `string`  | No       | Project root directory. When set, replaces the URL origin in browser-captured filenames (e.g. `"http://localhost:3000"`) with the local path, producing real filesystem paths in the Logbench UI. |
+
+### `logger.log(...content)`
+
+Send a generic log-level log.
 
 ### `logger.info(...content)`
 
@@ -60,13 +65,14 @@ logger.error("Request failed", { status: 500, headers: new Map([["x-request-id",
 
 ### `logger.setupGlobals()`
 
-Registers a global `bench` object on `globalThis` with `info`, `warn`, and `error` methods. Each method sends the log to Logbench **and** forwards the arguments to the corresponding `console` method (`console.info`, `console.warn`, `console.error`).
+Registers a global `bench` object on `globalThis` with `log`, `info`, `warn`, `error`, and their `*With` variants. Each method sends the log to Logbench **and** forwards the arguments to the corresponding `console` method (`console.log`, `console.info`, `console.warn`, `console.error`).
 
 ```typescript
 const logger = new Logbench({ projectId: "your-project-id" });
 logger.setupGlobals();
 
 // Available everywhere — no imports needed:
+bench.log("Server started", { port: 3000 });
 bench.info("Server started", { port: 3000 });
 bench.warn("Disk usage above 80%");
 bench.error("Failed to connect to database");
@@ -74,13 +80,15 @@ bench.error("Failed to connect to database");
 
 TypeScript users get type support automatically via the bundled `global.d.ts` declarations.
 
+### `logger.logWith(options, ...content)`
+
 ### `logger.infoWith(options, ...content)`
 
 ### `logger.warnWith(options, ...content)`
 
 ### `logger.errorWith(options, ...content)`
 
-Same as `info`, `warn`, and `err`, but with an additional `LogOptions` first argument for attaching metadata:
+Same as `log`, `info`, `warn`, and `error`, but with an additional `LogOptions` first argument for attaching metadata:
 
 | Option         | Type      | Description                                 |
 | -------------- | --------- | ------------------------------------------- |
@@ -95,14 +103,15 @@ logger.infoWith({ isBookmarked: true, annotation: "deploy v2.1.0" }, "Deployment
 
 ### `LogLevel`
 
-Exported enum for the three log levels if you need to reference them directly.
+Exported enum for the four log levels if you need to reference them directly.
 
 ```typescript
 import { LogLevel } from "logbench-js";
 
+LogLevel.Log; // "LOG"
 LogLevel.Info; // "INFO"
 LogLevel.Warn; // "WARNING"
-LogLevel.Err; // "ERROR"
+LogLevel.Error; // "ERROR"
 ```
 
 ## How it works

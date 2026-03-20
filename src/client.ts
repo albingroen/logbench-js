@@ -50,6 +50,10 @@ export class Logbench {
     this.callerFrameOffset = 4;
 
     globalThis.bench = {
+      log: (...args) => {
+        this.log(...args);
+        console.log(...args);
+      },
       info: (...args) => {
         this.info(...args);
         console.info(...args);
@@ -62,7 +66,31 @@ export class Logbench {
         this.error(...args);
         console.error(...args);
       },
+      logWith: (options, ...args) => {
+        this.logWith(options, ...args);
+        console.log(...args);
+      },
+      infoWith: (options, ...args) => {
+        this.infoWith(options, ...args);
+        console.info(...args);
+      },
+      warnWith: (options, ...args) => {
+        this.warnWith(options, ...args);
+        console.warn(...args);
+      },
+      errorWith: (options, ...args) => {
+        this.errorWith(options, ...args);
+        console.error(...args);
+      },
     };
+  }
+
+  /**
+   * Send a generic log-level log.
+   * @param content - One or more values of any type to log.
+   */
+  async log(...content: LogContent) {
+    return this.send(LogLevel.Log, content);
   }
 
   /**
@@ -70,7 +98,7 @@ export class Logbench {
    * @param content - One or more values of any type to log.
    */
   async info(...content: LogContent) {
-    return this.log(LogLevel.Info, content);
+    return this.send(LogLevel.Info, content);
   }
 
   /**
@@ -78,7 +106,7 @@ export class Logbench {
    * @param content - One or more values of any type to log.
    */
   async warn(...content: LogContent) {
-    return this.log(LogLevel.Warn, content);
+    return this.send(LogLevel.Warn, content);
   }
 
   /**
@@ -86,7 +114,16 @@ export class Logbench {
    * @param content - One or more values of any type to log.
    */
   async error(...content: LogContent) {
-    return this.log(LogLevel.Error, content);
+    return this.send(LogLevel.Error, content);
+  }
+
+  /**
+   * Send a generic log-level log with additional metadata.
+   * @param options - Bookmark and annotation metadata.
+   * @param content - One or more values of any type to log.
+   */
+  async logWith(options: LogOptions, ...content: LogContent) {
+    return this.send(LogLevel.Log, content, options);
   }
 
   /**
@@ -95,7 +132,7 @@ export class Logbench {
    * @param content - One or more values of any type to log.
    */
   async infoWith(options: LogOptions, ...content: LogContent) {
-    return this.log(LogLevel.Info, content, options);
+    return this.send(LogLevel.Info, content, options);
   }
 
   /**
@@ -104,7 +141,7 @@ export class Logbench {
    * @param content - One or more values of any type to log.
    */
   async warnWith(options: LogOptions, ...content: LogContent) {
-    return this.log(LogLevel.Warn, content, options);
+    return this.send(LogLevel.Warn, content, options);
   }
 
   /**
@@ -113,10 +150,10 @@ export class Logbench {
    * @param content - One or more values of any type to log.
    */
   async errorWith(options: LogOptions, ...content: LogContent) {
-    return this.log(LogLevel.Error, content, options);
+    return this.send(LogLevel.Error, content, options);
   }
 
-  private async log(level: LogLevel, content: LogContent, options?: LogOptions) {
+  private async send(level: LogLevel, content: LogContent, options?: LogOptions) {
     try {
       const source =
         this.options.captureSource !== false
