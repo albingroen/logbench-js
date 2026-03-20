@@ -19,9 +19,9 @@ The SDK lives under `src/` and is split by concern:
 
 - `src/index.ts` — Barrel re-exports all public API
 - `src/types.ts` — `LogbenchOptions`, `LogContent`, `LogOptions` type definitions
-- `src/enums.ts` — `LogLevel` enum (`Info`, `Warn`, `Err`)
+- `src/enums.ts` — `LogLevel` enum (`Info`, `Warn`, `Error`)
 - `src/utils.ts` — Internal helpers: `getCallerLocation` for source capture, `jsReplacer` for encoding JS-specific types (Map, Set, BigInt, Error, etc.) into a `{ _type, _value? }` envelope over the wire
-- `src/client.ts` — `Logbench` class with `info()`, `warn()`, `err()`, `infoWith()`, `warnWith()`, `errWith()` methods
+- `src/client.ts` — `Logbench` class with `info()`, `warn()`, `error()`, `infoWith()`, `warnWith()`, `errorWith()` methods
 
 All log methods POST to `{url}/api/projects/{projectId}/logs/ingest` using fetch. Errors are silently caught so logging never crashes the host application.
 

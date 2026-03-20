@@ -1,12 +1,12 @@
 {
   "name": "logbench-js",
-  "version": "0.1.6",
-  "author": "Albin Groen",
+  "version": "0.1.7",
   "license": "MIT",
+  "author": "Albin Groen",
+  "type": "module",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "types": "src/index.ts",
-  "type": "module",
   "exports": {
     ".": {
       "types": "./src/index.ts",
@@ -14,13 +14,21 @@
       "default": "./src/index.ts"
     }
   },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+  "scripts": {
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix"
   },
   "dependencies": {
     "error-stack-parser": "^2.1.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "oxfmt": "^0.41.0",
+    "oxlint": "^1.56.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
   }
 }
