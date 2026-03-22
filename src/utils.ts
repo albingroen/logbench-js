@@ -1,5 +1,5 @@
 import ErrorStackParser from "error-stack-parser";
-import type { SourceLocation } from "./types.ts";
+import type { SourceLocation } from "./types";
 
 /**
  * JSON.stringify replacer that encodes JS-specific types that have no JSON

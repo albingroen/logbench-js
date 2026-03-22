@@ -1,6 +1,6 @@
-import type { LogbenchOptions, LogContent, LogOptions } from "./types.ts";
-import { LogLevel } from "./enums.ts";
-import { getCallerLocation, jsReplacer } from "./utils.ts";
+import type { LogbenchOptions, LogContent, LogOptions } from "./types";
+import { LogLevel } from "./enums";
+import { getCallerLocation, jsReplacer } from "./utils";
 
 /**
  * Client for sending structured logs to a Logbench server.

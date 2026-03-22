@@ -1,6 +1,6 @@
 export {};
 
-import type { LogOptions } from "./types.ts";
+import type { LogOptions } from "./types";
 
 /**
  * Global logging interface registered by {@link Logbench.setupGlobals}.

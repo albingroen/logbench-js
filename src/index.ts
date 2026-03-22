@@ -1,5 +1,5 @@
-import "./global.d.ts";
+import "./global.d";
 
-export { Logbench } from "./client.ts";
-export { LogLevel } from "./enums.ts";
-export type { LogbenchOptions, LogContent, LogOptions } from "./types.ts";
+export { Logbench } from "./client";
+export { LogLevel } from "./enums";
+export type { LogbenchOptions, LogContent, LogOptions } from "./types";
